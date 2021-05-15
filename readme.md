@@ -8,7 +8,7 @@ This repository contains the original implementation of the Physio Motion Transf
 
 ## Overall
 
-This method is composed by the following **4** main components and **7** DL models:
+This method is composed by the following **5** main components and **9** DL models:
  - Body texture extractor
     1. **CIHP_PGN** (Body Instance segmentation)
     2. **OpenPose** (Body Pose segmentation (keypoints))
@@ -18,7 +18,10 @@ This method is composed by the following **4** main components and **7** DL mode
     1. **DensePose** (Body dense pose extractor)
     2. **Tex2Shape** (Body, DensePose to model)  
  - Video movement extractor
-    1. **ROMP** (body video movement(1+ frames) to pose extractor)   
+    1. **ROMP** (body video movement(1+ frames) to pose extractor)
+ - Image inpaiting
+    1. **BodyDelete** (Remove body from image)
+    2. **ImageInpaiting** (full background without the body)  
 
 *NOTE*: Tested on Docker container running on Ubuntu 16.04 LTS.
 
