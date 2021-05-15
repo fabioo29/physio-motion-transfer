@@ -4,7 +4,7 @@
 
 ## Introduction
 
-This repository contains the original implementation of the Physio Motion Transfer: **"A shape-aware retargeting approach to transfer human motion and appearance in monocular videos for physiotherapy purposes"**. This method uses four main components to get to the final result where the user will see his body animated with movements that they never did.
+This repository contains the original implementation of the Physio Motion Transfer: **"A shape-aware retargeting approach to transfer human motion and appearance in monocular videos for physiotherapy purposes"**. This method uses five main components to get to the final result where the user will see his body animated with movements that they never did.
 
 ## Overall
 
