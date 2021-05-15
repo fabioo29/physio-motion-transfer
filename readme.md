@@ -19,9 +19,9 @@ This method is composed by the following **5** main components and **9** DL mode
     2. **Tex2Shape** (Body, DensePose to model)  
  - Video movement extractor
     1. **ROMP** (body video movement(1+ frames) to pose extractor)
- - Image inpaiting
+ - Image inpaiting (**ToDo**)
     1. **BodyDelete** (Remove body from image)
-    2. **ImageInpaiting** (full background without the body)  
+    2. **Generative Image Inpainting** (full background without the body)  
 
 *NOTE*: Tested on Docker container running on Ubuntu 16.04 LTS.
 
