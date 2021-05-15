@@ -2,7 +2,7 @@
 
 Download and install DIRT: https://github.com/pmh47/dirt.
 
-Download the neutral SMPL model from http://smplify.is.tue.mpg.de/, rename it from basicModel_neutral_... to neutral_smpl.pkl and place it in the `assets` folder.
+Download the neutral SMPL model from http://smplify.is.tue.mpg.de/, rename it from "basicModel_neutral_..." to neutral_smpl.pkl and place it in the `assets` folder.
 ```
 # or you can use the terminal
 cp <path_to_smplify>/code/models/basicModel_neutral_lbs_10_207_0_v1.0.0.pkl assets/neutral_smpl.pkl
