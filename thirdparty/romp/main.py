@@ -65,9 +65,9 @@ import torch.nn as nn
 from torch.nn import functional as F
 from torch.utils.data import Dataset, DataLoader
 
-import config
-import constants
-from config import args
+from assets import config
+from assets import constants
+from assets.config import args
 
 if sys.version_info[0] == 3:
     import _pickle as pkl
@@ -1541,13 +1541,8 @@ class Base(nn.Module):
             raise NotImplementedError('forward mode is not recognized! please set proper mode (train/val)')
 
     def train_forward(self, meta_data, **cfg):
-        if args.model_precision=='fp16':
-            with autocast():
-                outputs = self.feed_forward(meta_data)
-                outputs, meta_data = self._result_parser.train_forward(outputs, meta_data, cfg)
-        else:
-            outputs = self.feed_forward(meta_data)
-            outputs, meta_data = self._result_parser.train_forward(outputs, meta_data, cfg)
+        outputs = self.feed_forward(meta_data)
+        outputs, meta_data = self._result_parser.train_forward(outputs, meta_data, cfg)
         outputs['meta_data'] = meta_data
         return outputs
 
@@ -1616,13 +1611,6 @@ class Base1(object):
         self.eval_cfg = {'mode':'train', 'calc_loss': False}
         self.gpus = [int(i) for i in self.gpu.split(',')]
 
-    def _create_data_loader(self,train_flag=True):
-        logging.info('gathering datasets')
-        datasets = MixedDataset(train_flag=train_flag)
-        return DataLoader(dataset = datasets,\
-                batch_size = self.batch_size if train_flag else self.val_batch_size, shuffle = True, \
-                drop_last = True if train_flag else False, pin_memory = True,num_workers = self.nw)
-
     def _create_single_data_loader(self, **kwargs):
         logging.info('gathering datasets')
         datasets = SingleDataset(**kwargs)
@@ -1643,11 +1631,7 @@ class Base1(object):
     def net_forward(self, meta_data, cfg=None):
         ds_org, imgpath_org = get_remove_keys(meta_data,keys=['data_set','imgpath'])
         meta_data['batch_ids'] = torch.arange(len(meta_data['image']))
-        if self.model_precision=='fp16':
-            with autocast():
-                outputs = self.model(meta_data, **cfg)
-        else:
-            outputs = self.model(meta_data, **cfg)
+        outputs = self.model(meta_data, **cfg)
 
         outputs['meta_data']['data_set'], outputs['meta_data']['imgpath'] = reorganize_items([ds_org, imgpath_org], outputs['reorganize_idx'].cpu().numpy())
         return outputs
