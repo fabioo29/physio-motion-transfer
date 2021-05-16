@@ -19,7 +19,7 @@ ARGS:
  gmodel_path: 'assets/trained_models/ROMP_hrnet32.pkl' #'../trained_models/ROMP_hrnet32+CAR.pkl' # '../trained_models/ROMP_resnet50.pkl'
  save_visualization_on_img: True
 
- demo_image_folder: 'data/samples_jpg' #'../demo/videos/Messi_1'
+ demo_image_folder: 'data/' #'../demo/videos/Messi_1'
  output_dir: 'data/samples_jpg_results'
  save_mesh: True
  save_centermap: False
