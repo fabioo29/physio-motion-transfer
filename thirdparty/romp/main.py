@@ -1,3 +1,7 @@
+```
+    MESA_GL_VERSION_OVERRIDE=4.1 CUDA_VISIBLE_DEVICES=0 python main.py
+```
+
 BN_MOMENTUM = 0.1
 
 VERTEX_IDS = {
