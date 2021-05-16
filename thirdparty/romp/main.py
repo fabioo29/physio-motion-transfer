@@ -1,6 +1,7 @@
-```
-    MESA_GL_VERSION_OVERRIDE=4.1 CUDA_VISIBLE_DEVICES=0 python main.py
-```
+'''
+    MESA_GL_VERSION_OVERRIDE=4.1 CUDA_VISIBLE_DEVICES=0 python main.py --configs_yml=assets/video.yml
+    MESA_GL_VERSION_OVERRIDE=4.1 CUDA_VISIBLE_DEVICES=0 python main.py --configs_yml=assets/single_image.yml
+'''
 
 BN_MOMENTUM = 0.1
 
@@ -1485,7 +1486,7 @@ class PW3D(Image_base):
 class Internet(Dataset):
     def __init__(self, image_folder=None, **kwargs):
         super(Internet,self).__init__()
-        self.file_paths = glob.glob(os.path.join(image_folder,'*'))
+        self.file_paths = [os.path.join(image_folder,f) for f in os.listdir(image_folder) if (f.endswith('.jpg') or f.endswith('.png'))]
         sorted(self.file_paths)
         
         print('Loading {} internet data from:{}'.format(len(self), image_folder))
@@ -1663,21 +1664,33 @@ class Demo(Base1):
         os.makedirs(self.output_dir, exist_ok=True)
         if '-1' not in self.gpu:
             self.visualizer.result_img_dir = self.output_dir 
-            
+
         internet_loader = self._create_single_data_loader(dataset='internet',train_flag=False, image_folder=image_folder)
+
         with torch.no_grad():
             for test_iter,meta_data in enumerate(internet_loader):
                 outputs = self.net_forward(meta_data, cfg=self.demo_cfg)
                 reorganize_idx = outputs['reorganize_idx'].cpu().numpy()
                 
-                if self.save_dict_results:
-                    self.reorganize_results(outputs, outputs['meta_data']['imgpath'], reorganize_idx, self.output_dir)
-                if self.save_visualization_on_img:
-                    vis_eval_results = self.visualizer.visulize_result_onorg(outputs['verts'], outputs['verts_camed'], outputs['meta_data'], \
-                    reorganize_idx, centermaps= outputs['center_map'] if self.save_centermap else None,save_img=True)#
+                if not os.path.exists('out_data'):
+                    os.makedirs('out_data')
 
-                if self.save_mesh:
-                    save_meshes(reorganize_idx, outputs, self.output_dir, self.smpl_faces) 
+                width= 1080
+                height = 1080
+                camera_c = [540.0, 540.0]
+                camera_f = [1080, 1080]
+                vertices = outputs['verts']
+                data_to_save = {
+                    'width':width,
+                    'camera_c':camera_c,
+                    'vertices':vertices,
+                    'camera_f':camera_f, 
+                    'height':height
+                }
+                pickle_out = open("out_data/data_{}.pkl".format(test_iter),"wb")
+                pkl.dump(data_to_save, pickle_out, 2)
+                pickle_out.close()   
+
 
     def reorganize_results(self, outputs, img_paths, reorganize_idx, test_save_dir=None):
         results = {}
@@ -1745,13 +1758,13 @@ class Demo(Base1):
             vis_eval_results = self.visualizer.visulize_result_onorg(outputs['verts'], outputs['verts_camed'], vis_dict, reorganize_idx=outputs['reorganize_idx'].cpu().numpy())
             result_frames.append(vis_eval_results[0])
             outputs['meta_data']['imgpath'] = img_paths
-            if self.save_mesh:
-                save_meshes(outputs['reorganize_idx'].cpu().numpy(), outputs, self.output_dir, self.smpl_faces)
+            #if self.save_mesh:
+            #    save_meshes(outputs['reorganize_idx'].cpu().numpy(), outputs, self.output_dir, self.smpl_faces)
         
-        if self.save_dict_results:
-            save_dict_path = os.path.join(self.output_dir, video_basename+'_results.npz')
-            print('Saving parameter results to {}'.format(save_dict_path))
-            np.savez(save_dict_path, results=results)
+        #if self.save_dict_results:
+        #    save_dict_path = os.path.join(self.output_dir, video_basename+'_results.npz')
+        #    print('Saving parameter results to {}'.format(save_dict_path))
+        #    np.savez(save_dict_path, results=results)
 
         if self.save_video_results:
             video_save_name = os.path.join(self.output_dir, video_basename+'_results.mp4')
@@ -2781,7 +2794,10 @@ dataset_dict = {'pw3d':PW3D, 'internet':Internet}
 
 def main():
     demo = Demo()
-    demo.process_video(args.input_video_path)
+    if args.configs_yml.split('/')[1] == 'video.yml':
+        demo.process_video(args.input_video_path)
+    else:
+        demo.run(os.path.join(args.demo_image_folder))
 
 if __name__ == '__main__':
     main()
