@@ -1,2 +1,4 @@
 
-Paste here data in (.mp4) or (.jpg) format
+Paste data here:
+ - sample.mp4 for video input
+ - (.jpg) or (.png) iamges for imamge input
