@@ -1679,7 +1679,7 @@ class Demo(Base1):
                 height = 1080
                 camera_c = [540.0, 540.0]
                 camera_f = [1080, 1080]
-                vertices = outputs['verts']
+                vertices = outputs['verts'].cpu().detach().numpy()
                 data_to_save = {
                     'width':width,
                     'camera_c':camera_c,
