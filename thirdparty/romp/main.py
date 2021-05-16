@@ -189,7 +189,7 @@ def img_preprocess(image, imgpath, input_size=512, ds='internet', single_img_inp
     image_size = image.shape[:2][::-1]
     image_org = Image.fromarray(image)
     
-    resized_image_size = (float(input_size)/max(image_size) * np.array(image_size) // 2 * 2).astype(np.int)
+    resized_image_size = (float(input_size)/max(image_size) * np.array(image_size) // 2 * 2).astype(int)
     padding = tuple((input_size-resized_image_size)//2)
     transform = torchvision.transforms.Compose([
         torchvision.transforms.Resize([resized_image_size[1],resized_image_size[0]], interpolation=3),
@@ -205,7 +205,7 @@ def img_preprocess(image, imgpath, input_size=512, ds='internet', single_img_inp
         #torchvision.transforms.ToTensor(),
         ])
     image_org = torch.from_numpy(np.array(transform_org(image_org)))
-    padding_org = (np.array(list(padding_org))*float(input_size*2/max(image_size))).astype(np.int)
+    padding_org = (np.array(list(padding_org))*float(input_size*2/max(image_size))).astype(int)
     if padding_org[0]>0:
         image_org[:,:padding_org[0]] = 255 
         image_org[:,-padding_org[0]:] = 255
@@ -215,7 +215,7 @@ def img_preprocess(image, imgpath, input_size=512, ds='internet', single_img_inp
 
     offsets = np.array([image_size[1],image_size[0],resized_image_size[0],\
         resized_image_size[0]+padding[1],resized_image_size[1],resized_image_size[1]+padding[0],padding[1],\
-        resized_image_size[0],padding[0],resized_image_size[1]],dtype=np.int)
+        resized_image_size[0],padding[0],resized_image_size[1]],dtype=int)
     offsets = torch.from_numpy(offsets).float()
 
     name = os.path.basename(imgpath)
