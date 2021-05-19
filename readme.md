@@ -4,7 +4,7 @@
 
 ## Introduction
 
-This repository contains the original implementation of the Physio Motion Transfer: **"A shape-aware retargeting approach to transfer human motion and appearance in monocular videos for physiotherapy purposes"**. This method uses five main components to get to the final result where the user will see his body animated with movements that he never did.
+This repository contains the original implementation of Physio Motion Transfer: **"A shape-aware retargeting approach to transfer human motion and appearance in monocular videos for physiotherapy purposes"**. This method uses five main components to get to the final result where the user will see his body animated with movements that he never did.
 
 ## Overall
 
@@ -23,7 +23,7 @@ This method is composed by the following **5** main components and **9** DL mode
     1. **BodyDelete** (Remove body from image)
     2. **Generative Image Inpainting** (full background without the body)  
 
-*NOTE*: Tested on Docker container running on Ubuntu 16.04 LTS.
+*NOTE*: Tested on Docker container running Ubuntu 16.04 LTS, Python3.7 and tensorflow-gpu 1.14.
 
 ## Setup and Installation
 
