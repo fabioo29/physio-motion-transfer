@@ -1,9 +1,5 @@
-ARG CUDA_BASE_VERSION=10.0
-ARG CUDNN_VERSION=7.4.1.5
-ARG TENSORFLOW_VERSION=1.14.0
-
 # use CUDA + OpenGL
-FROM nvidia/cudagl:${CUDA_BASE_VERSION}-devel-ubuntu16.04
+FROM nvidia/cudagl:10.0-devel-ubuntu16.04
 MAINTAINER Fabio Oliveira (fabiodiogo29@gmail.com)
 
 # install apt dependencies
@@ -25,20 +21,14 @@ RUN apt-add-repository -y ppa:deadsnakes/ppa && \
     ln -s /usr/bin/python3.7 /usr/bin/python && \
     curl https://bootstrap.pypa.io/get-pip.py | python
 
-# set environment variables
-ENV CUDA_BASE_VERSION=${CUDA_BASE_VERSION}
-ENV CUDNN_VERSION=${CUDNN_VERSION}
-
 # setting up cudnn
 RUN apt-get install -y --no-install-recommends \             
-	libcudnn7=$(echo $CUDNN_VERSION)-1+cuda$(echo $CUDA_BASE_VERSION) \             
-	libcudnn7-dev=$(echo $CUDNN_VERSION)-1+cuda$(echo $CUDA_BASE_VERSION) 
+	libcudnn7=7.4.1.5-1+cuda10.0 \             
+	libcudnn7-dev=7.4.1.5-1+cuda10.0 
 RUN apt-mark hold libcudnn7 && rm -rf /var/lib/apt/lists/*
 
-ENV TENSORFLOW_VERSION=${TENSORFLOW_VERSION}
-
 # install python dependencies
-RUN python -m pip install tensorflow-gpu==$(echo $TENSORFLOW_VERSION)
+RUN python -m pip install tensorflow-gpu==1.14.0
 
 # install dirt
 ENV CUDAFLAGS='-DNDEBUG=1'
