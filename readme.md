@@ -26,8 +26,7 @@ This method is composed by the following **5** main components and **9** DL mode
 *NOTE*: Tested on Docker container running Ubuntu 16.04 LTS, Python3.7 and tensorflow-gpu 1.14.
 
 ## Setup and Installation
-
-https://mega.nz/file/NS4mSRDD#nsKfV5pLtntz4hvIsua_BGWwduDtx7K_1C5a4sW0vZQ
+https://mega.nz/file/sOhmwQbT#IICjPAEy-uzcnQNaAZC2nl77SGUp-BnYmil-cSVNP8s  
 Go to xyz.com  
 Add data(video or frames) for the patient  
 Add data(video) with the desired movement  
