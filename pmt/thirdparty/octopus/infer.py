@@ -47,7 +47,7 @@ if sys.version_info[0] == 3:
 else:
     import cPickle as pkl
 
-from .assets import pyopenpose as op
+import pyopenpose as op
 # use this below if the above line doesn't work
 # sys.path.append('/path/to/where/is/openpose/folder')
 
