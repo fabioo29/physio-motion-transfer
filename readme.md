@@ -26,11 +26,27 @@ This method is composed by the following **5** main components and **9** DL mode
 *NOTE*: Tested on Docker container running Ubuntu 16.04 LTS, Python3.7 and tensorflow-gpu 1.14.
 
 ## Setup and Installation
-https://mega.nz/file/sOhmwQbT#IICjPAEy-uzcnQNaAZC2nl77SGUp-BnYmil-cSVNP8s  
+### Dockerhub (fastest option)
+
+```shell
+docker pull fabioo29/physio-motion-transfer:latest
+docker run --rm -it physio-motion-transfer
+```
+
+### Build image (recommended but slower option)
+
+```shell
+docker clone https://github.com/Fabioo29/physio-motion-transfer.git
+cd physio-motion-transfer
+docker build . -t physio-motion-transfer
+docker run --rm -it physio-motion-transfer
+```
+
+## Inference  
 Go to xyz.com  
 Add data(video or frames) for the patient  
 Add data(video) with the desired movement  
-Patient tries to follow his animated avatar on screen  
+Start inference
 
 ## License
 
