@@ -1,7 +1,7 @@
 FROM nvidia/cudagl:10.0-devel-ubuntu16.04
 MAINTAINER Fabio Oliveira (fabiodiogo29@gmail.com)
 
-ADD ../physio-motion-transfer ./pmt
+ADD ./pmt/* $HOME/root/pmt/
 
 # install apt dependencies
 RUN apt-get -y --no-install-recommends update && \
@@ -53,7 +53,7 @@ RUN apt-mark hold libcudnn7 && rm -rf /var/lib/apt/lists/*
 
 # install python dependencies
 RUN python -m pip install tensorflow-gpu==1.14.0 numpy protobuf opencv-python
-#RUN pip install --upgrade pip
+RUN apt-get update && apt-get install -y python3.7-dev libpython3.7-dev
 
 # install dirt
 ENV CUDAFLAGS='-DNDEBUG=1'
@@ -61,11 +61,49 @@ RUN cd ~ && git clone https://github.com/pmh47/dirt.git && \
  	python -m pip install dirt/
 
 # run dirt test command
-RUN python ~/dirt/tests/square_test.py
+#RUN python ~/dirt/tests/square_test.py
 
-RUN cd ~ && \
-	git clone https://github.com/CMU-Perceptual-Computing-Lab/openpose.git && \
+# build pyopenpose
+RUN cd ~ && git clone https://github.com/CMU-Perceptual-Computing-Lab/openpose.git && \
+	cd openpose && \
 	mkdir build && \
 	cd build
 
-#RUN cmake .. && make -j`nproc`
+RUN cd ~/openpose/build && \
+	cmake -DBUILD_PYTHON=ON .. && \
+	make -j`nproc` && \
+	make -j`nproc` && \
+	mv python/openpose/pyopenpose.cpython-37m-x86_64-linux-gnu.so /usr/local/lib/python3.7/dist-packages/
+
+# install pmt requirements
+RUN cd ~/pmt && pip install -r requirements.txt
+
+# add pmt large files to respective dirs
+RUN apt install -y megatools unzip && cd /tmp/ && megadl 'https://mega.nz/#!sOhmwQbT!IICjPAEy-uzcnQNaAZC2nl77SGUp-BnYmil-cSVNP8s' && unzip pmt-large-files.zip
+
+RUN cd /tmp/ && \
+	mv model.ckpt-593292.data-00000-of-00001 ~/pmt/thirdparty/cihp_pgn/assets/ && \
+	cp neutral_smpl.pkl  ~/pmt/thirdparty/octopus/assets/ && \
+	mv octopus_weights.hdf5  ~/pmt/thirdparty/octopus/assets/ && \
+	mv pose_iter_584000.caffemodel  ~/pmt/thirdparty/octopus/assets/pose/body_25/ && \
+	mv pose_iter_584000.caffemodel  ~/pmt/thirdparty/octopus/assets/face && \
+	mv basicModel_f_lbs_10_207_0_v1.0.0.pkl ~/pmt/thirdparty/romp/assets/ && \
+	mv basicmodel_m_lbs_10_207_0_v1.0.0.pkl ~/pmt/thirdparty/romp/assets/ && \
+	mv basicModel_neutral_lbs_10_207_0_v1.0.0.pkl ~/pmt/thirdparty/romp/assets/ && \
+	mv ROMP_hrnet32.pkl ~/pmt/thirdparty/romp/assets/ && \
+	mv ROMP_hrnet32+CAR.pkl ~/pmt/thirdparty/romp/assets/ && \
+	mv ROMP_resnet50.pkl ~/pmt/thirdparty/romp/assets/ && \
+	mv SMPL_NEUTRAL.pkl ~/pmt/thirdparty/romp/assets/ && \
+	mv dp_uv_lookup_256.npy ~/pmt/thirdparty/tex2shape/assets/ && \
+	mv tex2shape_weights.hdf5 ~/pmt/thirdparty/tex2shape/assets/ && \
+	mv neutral_smpl.pkl ~/pmt/thirdparty/tex2shape/assets/
+
+# install opendr
+RUN cd ~ && git clone https://github.com/yifita/opendr.git && cd opendr && python setup.py build && python setup.py install && pip install .
+
+# install densepose python3
+RUN cd ~ && git clone --recursive https://github.com/pytorch/pytorch pytorch && cd pytorch && git checkout v1.0.0 && \
+	python setup.py install && pip install future
+ 
+
+#RUN cd ~ && git clone https://github.com/stimong/densepose_python3.git ./densepose && cd densepose
