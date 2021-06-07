@@ -53,8 +53,8 @@ from .assets.config import cfg
 from .assets.config import merge_cfg_from_file
 from .assets.config import load_cfg
 
-from .assets import cython_bbox as cython_bbox
-from .assets import cython_nms as cython_nms
+import cython_bbox as cython_bbox
+import cython_nms as cython_nms
 
 from collections import defaultdict
 from collections import OrderedDict
