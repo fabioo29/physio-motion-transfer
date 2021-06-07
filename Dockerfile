@@ -113,6 +113,7 @@ RUN git clone https://github.com/pytorch/pytorch.git && cd pytorch && \
 
 # install cocoapi
 RUN git clone https://github.com/cocodataset/cocoapi.git && \
+	cd cocoapi/PythonAPI && \
 	make install && \
 	python setup.py install --user
 
