@@ -33,9 +33,9 @@ from opendr.renderer import draw_edge_visibility, draw_boundary_images, draw_bou
 from opendr.contexts._constants import *
 
 if platform.system()=='Darwin':
-    from .assets.ctx_mac import OsContext 
+    from opendr.contexts.ctx_mac import OsContext 
 else:
-    from .assets.ctx_mesa import OsContext 
+    from opendr.contexts.ctx_mesa import OsContext 
 
 #sys.path.append('path/to/opendr/opendr') # if dir above does not work with your OS
 
