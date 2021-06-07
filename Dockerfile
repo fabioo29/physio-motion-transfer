@@ -1,7 +1,7 @@
 FROM nvidia/cudagl:10.0-devel-ubuntu16.04
 MAINTAINER Fabio Oliveira (fabiodiogo29@gmail.com)
 
-ADD ./pmt/* $HOME/root/pmt/
+ADD ./pmt $HOME/root/pmt/
 
 # install apt dependencies
 RUN apt-get -y --no-install-recommends update && \
@@ -76,7 +76,8 @@ RUN cd ~/openpose/build && \
 	mv python/openpose/pyopenpose.cpython-37m-x86_64-linux-gnu.so /usr/local/lib/python3.7/dist-packages/
 
 # install pmt requirements
-RUN cd ~/pmt && pip install -r requirements.txt
+RUN ls ~
+RUN cd ~/pmt/ && pip install -r requirements.txt
 
 # add pmt large files to respective dirs
 RUN apt install -y megatools unzip && cd /tmp/ && megadl 'https://mega.nz/#!sOhmwQbT!IICjPAEy-uzcnQNaAZC2nl77SGUp-BnYmil-cSVNP8s' && unzip pmt-large-files.zip
@@ -86,7 +87,7 @@ RUN cd /tmp/ && \
 	cp neutral_smpl.pkl  ~/pmt/thirdparty/octopus/assets/ && \
 	mv octopus_weights.hdf5  ~/pmt/thirdparty/octopus/assets/ && \
 	mv pose_iter_584000.caffemodel  ~/pmt/thirdparty/octopus/assets/pose/body_25/ && \
-	mv pose_iter_584000.caffemodel  ~/pmt/thirdparty/octopus/assets/face && \
+	mv pose_iter_116000.caffemodel  ~/pmt/thirdparty/octopus/assets/face && \
 	mv basicModel_f_lbs_10_207_0_v1.0.0.pkl ~/pmt/thirdparty/romp/assets/ && \
 	mv basicmodel_m_lbs_10_207_0_v1.0.0.pkl ~/pmt/thirdparty/romp/assets/ && \
 	mv basicModel_neutral_lbs_10_207_0_v1.0.0.pkl ~/pmt/thirdparty/romp/assets/ && \
@@ -99,11 +100,24 @@ RUN cd /tmp/ && \
 	mv neutral_smpl.pkl ~/pmt/thirdparty/tex2shape/assets/
 
 # install opendr
-RUN cd ~ && git clone https://github.com/yifita/opendr.git && cd opendr && python setup.py build && python setup.py install && pip install .
+RUN cd ~ && git clone https://github.com/yifita/opendr.git && cd opendr/ && pip install . && \
+	python setup.py build && python setup.py install && pip install .
+
+# install caffe2 & pytorch
+# add MAX_JOBS=2 before python setup.py install if install error
+RUN git clone https://github.com/pytorch/pytorch.git && cd pytorch && \
+	git submodule update --init --recursive && \
+	python setup.py install && \
+	pip install -r https://raw.githubusercontent.com/pytorch/pytorch/master/requirements.txt
+
+# install cocoapi
+RUN git clone https://github.com/cocodataset/cocoapi.git && \
+	make install && \
+	python setup.py install --user
 
 # install densepose python3
-RUN cd ~ && git clone --recursive https://github.com/pytorch/pytorch pytorch && cd pytorch && git checkout v1.0.0 && \
-	python setup.py install && pip install future
- 
-
-#RUN cd ~ && git clone https://github.com/stimong/densepose_python3.git ./densepose && cd densepose
+RUN git clone https://github.com/stimong/densepose_python3.git densepose && \
+	cd densepose && \ pip install -r requirements.txt && \
+	pip install opencv-python==4.2.0.32 && \
+	make && \
+	ln -s  /root/densepose/build/lib.linux-x86_64-3.7/detectron/utils/* /usr/local/lib/python3.7/dist-packages/
