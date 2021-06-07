@@ -119,7 +119,7 @@ RUN git clone https://github.com/cocodataset/cocoapi.git && \
 
 # install densepose python3
 RUN git clone https://github.com/stimong/densepose_python3.git densepose && \
-	cd densepose && \ pip install -r requirements.txt && \
+	cd densepose && pip install -r requirements.txt && \
 	pip install opencv-python==4.2.0.32 && \
 	make && \
 	ln -s  /root/densepose/build/lib.linux-x86_64-3.7/detectron/utils/* /usr/local/lib/python3.7/dist-packages/
