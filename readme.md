@@ -29,7 +29,7 @@ This method is composed by the following **5** main components and **9** DL mode
 ### Dockerhub (fastest option)
 
 ```shell
-docker pull fabioo29/physio-motion-transfer:latest
+docker pull fabioo29/physio-motion-transfer:pmt
 docker run --rm -it physio-motion-transfer
 ```
 
