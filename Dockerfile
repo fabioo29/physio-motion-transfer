@@ -105,20 +105,20 @@ RUN cd ~ && git clone https://github.com/yifita/opendr.git && cd opendr/ && pip 
 
 # install caffe2 & pytorch
 # the higher MAX_JOBS is, faster pytorch install but it requires more computer resources 
-RUN git clone https://github.com/pytorch/pytorch.git && cd pytorch && \
+RUN cd ~ && git clone https://github.com/pytorch/pytorch.git && cd pytorch && \
 	pip install -r https://raw.githubusercontent.com/pytorch/pytorch/master/requirements.txt && \
 	pip install pyyaml==5.4.1 && \
 	git submodule update --init --recursive && \
 	MAX_JOBS=2 python setup.py install
 
 # install cocoapi
-RUN git clone https://github.com/cocodataset/cocoapi.git && \
+RUN cd ~ && git clone https://github.com/cocodataset/cocoapi.git && \
 	cd cocoapi/PythonAPI && \
 	make install && \
 	python setup.py install --user
 
 # install densepose python3
-RUN git clone https://github.com/stimong/densepose_python3.git densepose && \
+RUN cd ~ && git clone https://github.com/stimong/densepose_python3.git densepose && \
 	cd densepose && pip install -r requirements.txt && \
 	pip install opencv-python==4.2.0.32 && \
 	make && \
