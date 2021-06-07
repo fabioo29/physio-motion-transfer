@@ -75,6 +75,10 @@ RUN cd ~/openpose/build && \
 	make -j`nproc` && \
 	mv python/openpose/pyopenpose.cpython-37m-x86_64-linux-gnu.so /usr/local/lib/python3.7/dist-packages/
 
+# install pmt requirements
+RUN ls ~
+RUN cd ~/pmt/ && pip install -r requirements.txt
+
 # add pmt large files to respective dirs
 RUN apt install -y megatools unzip && cd /tmp/ && megadl 'https://mega.nz/#!sOhmwQbT!IICjPAEy-uzcnQNaAZC2nl77SGUp-BnYmil-cSVNP8s' && unzip pmt-large-files.zip
 
@@ -103,6 +107,7 @@ RUN cd ~ && git clone https://github.com/yifita/opendr.git && cd opendr/ && pip 
 # add MAX_JOBS=2 before python setup.py install if install error
 RUN git clone https://github.com/pytorch/pytorch.git && cd pytorch && \
 	pip install -r https://raw.githubusercontent.com/pytorch/pytorch/master/requirements.txt && \
+	pip install pyyaml==5.4.1 && \
 	git submodule update --init --recursive && \
 	python setup.py install
 
@@ -113,10 +118,7 @@ RUN git clone https://github.com/cocodataset/cocoapi.git && \
 
 # install densepose python3
 RUN git clone https://github.com/stimong/densepose_python3.git densepose && \
-	cd densepose && pip install -r requirements.txt && \
+	cd densepose && \ pip install -r requirements.txt && \
 	pip install opencv-python==4.2.0.32 && \
 	make && \
 	ln -s  /root/densepose/build/lib.linux-x86_64-3.7/detectron/utils/* /usr/local/lib/python3.7/dist-packages/
-
-# install pmt requirements
-RUN cd ~/pmt/ && pip install -r requirements.txt
