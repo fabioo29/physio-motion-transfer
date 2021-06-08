@@ -1,8 +1,5 @@
 astunparse==1.6.3
 cached-property==1.5.2
-cmake==3.11.4
-detectron==0.0.0
-dirt==0.3.0
 enum34==1.1.10
 funcsigs==1.0.2
 future==0.18.2
@@ -11,12 +8,10 @@ importlib-metadata==4.5.0
 memory-profiler==0.58.0
 mock==3.0.5
 opencv-python==4.2.0.32
-opendr==0.78
 opt-einsum==2.3.2
 pycocotools==2.0
 pycurl==7.43.0
 pygobject==3.20.0
-python-apt==1.1.0b1+ubuntu0.16.4.12
 pyyaml==5.4.1
 keras==2.2.4
 tqdm
