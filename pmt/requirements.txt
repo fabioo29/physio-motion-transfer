@@ -9,7 +9,6 @@ memory-profiler==0.58.0
 mock==3.0.5
 opencv-python==4.2.0.32
 opt-einsum==2.3.2
-pycocotools==2.0
 pycurl==7.43.0
 pygobject==3.20.0
 pyyaml==5.4.1
