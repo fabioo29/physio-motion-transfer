@@ -76,7 +76,6 @@ RUN cd ~/openpose/build && \
 	mv python/openpose/pyopenpose.cpython-37m-x86_64-linux-gnu.so /usr/local/lib/python3.7/dist-packages/
 
 # install pmt requirements
-RUN ls ~
 RUN cd ~/pmt/ && pip install -r requirements.txt
 
 # add pmt large files to respective dirs
