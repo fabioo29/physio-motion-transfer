@@ -8,8 +8,6 @@ import pickle as pkl
 import warnings
 import multiprocessing
 
-# sys.path.append('/pytorch/build')
-
 # stderr = sys.stderr
 # sys.stderr = open(os.devnull, 'w')
 
@@ -29,25 +27,33 @@ from keras.backend.tensorflow_backend import get_session
 INPUT_RESIZE = 1080
 BATCHSIZE = 25
 
-def clear_gpu(*models, do_cuda=None):
+def clear_gpu(*models, do_cuda=None, do_tf=None):
     
     # print("Before clean")
-    GPUtil.showUtilization()
+    # GPUtil.showUtilization()
     
     # clear pytorch memory
     torch.cuda.empty_cache()
 
-    if cuda:
+    if do_cuda:
         # clear cuda memory
         device = cuda.get_current_device()
         device.reset()
         cuda.close()
 
-    # clear tf / keras memory
-    sess = get_session()
-    clear_session()
-    sess.close()
-    sess = get_session()
+    if do_tf:
+        # clear tf / keras memory
+        sess = get_session()
+        clear_session()
+        sess.close()
+        sess = get_session()
+
+        # set new tensorflow session
+        config = tf.ConfigProto()
+        config.gpu_options.per_process_gpu_memory_fraction = 1
+        config.gpu_options.allow_growth = True
+        config.gpu_options.visible_device_list = "0"
+        set_session(tf.Session(config=config))
 
     for model in models:
         try:
@@ -58,14 +64,7 @@ def clear_gpu(*models, do_cuda=None):
     gc.collect() # if it's done something you should see a number being outputted
 
     # print("After clean")
-    GPUtil.showUtilization()
-
-    #set new tensorflow session
-    config = tf.ConfigProto()
-    config.gpu_options.per_process_gpu_memory_fraction = 1
-    config.gpu_options.allow_growth = True
-    config.gpu_options.visible_device_list = "0"
-    set_session(tf.Session(config=config))
+    # GPUtil.showUtilization()
 
 def run_cihp_pgn(input_dir, return_dict):
     """Decode batch of segmentation masks.
@@ -144,6 +143,7 @@ def run_cihp_pgn(input_dir, return_dict):
     # Set up tf session and initialize variables.
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
+    
     with tf.Session(config=config) as sess:
         init = tf.global_variables_initializer()
 
@@ -153,11 +153,11 @@ def run_cihp_pgn(input_dir, return_dict):
         # Load weights.
         loader = tf.train.Saver(var_list=restore_var)
 
-        ckpt = tf.train.get_checkpoint_state('thirdparty/cihp_pgn/assets')
+        ckpt = tf.train.get_checkpoint_state(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'thirdparty/cihp_pgn/assets'))
 
         if ckpt and ckpt.model_checkpoint_path:
             ckpt_name = os.path.basename(ckpt.model_checkpoint_path)
-            loader.restore(sess, os.path.join('thirdparty/cihp_pgn/assets', ckpt_name))
+            loader.restore(sess, os.path.join(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'thirdparty/cihp_pgn/assets'), ckpt_name))
 
         threads = tf.train.start_queue_runners(coord=coord, sess=sess)
 
@@ -454,22 +454,22 @@ def run_tex2shape(img_files, iuv_files, move_pose, weights_tex2shape, weights_be
 
 def main():
 
-    clear_gpu(do_cuda=True)
-
+    # clear_gpu(do_cuda=True, do_tf=True)
+    
     manager = multiprocessing.Manager()
     return_dict = manager.dict()
 
-    # p = multiprocessing.Process(
-    #         target=run_cihp_pgn, args=(
-    #             'body_samples/',
-    #             return_dict
-    #         )
-    #     )
-    # p.start()
-    # p.join()
+    p = multiprocessing.Process(
+            target=run_cihp_pgn, args=(
+                'body_samples/',
+                return_dict
+            )
+        )
+    p.start()
+    p.join()
 
     # pkl.dump(return_dict['segm_frames'], open('assets/segm_frames.txt', 'wb'))
-    return_dict['segm_frames'] = pkl.load(open('assets/segm_frames.txt', 'rb'))
+    # return_dict['segm_frames'] = pkl.load(open('assets/segm_frames.txt', 'rb'))
 
     return_dict['frame_data'] = run_octopus(
         return_dict['segm_frames'],
