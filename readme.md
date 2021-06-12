@@ -8,7 +8,7 @@ This repository contains the original implementation of Physio Motion Transfer: 
 
 ## Overall
 
-This method is composed by the following **5** main components and **9** DL models:
+This method is composed by **5** main components and **9** DL models:
  - Body texture extractor
     1. **CIHP_PGN** (Body Instance segmentation)
     2. **OpenPose** (Body Pose segmentation (keypoints))
