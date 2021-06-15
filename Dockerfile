@@ -70,7 +70,13 @@ RUN cd ~ && git clone https://github.com/CMU-Perceptual-Computing-Lab/openpose.g
 	cd build
 
 RUN cd ~/openpose/build && \
-	cmake -DBUILD_PYTHON=ON .. && \
+	cmake -DBUILD_PYTHON=ON \
+	-DDOWNLOAD_BODY_25_MODEL=ON \
+        -DDOWNLOAD_BODY_MPI_MODEL=OFF \
+        -DDOWNLOAD_HAND_MODEL=OFF \
+        -DDOWNLOAD_FACE_MODEL=ON .. && \
+	sed -ie 's/set(AMPERE "80 86")/#&/g'  ../cmake/Cuda.cmake && \
+    	sed -ie 's/set(AMPERE "80 86")/#&/g'  ../3rdparty/caffe/cmake/Cuda.cmake && \
 	make -j`nproc` && \
 	make -j`nproc` && \
 	mv python/openpose/pyopenpose.cpython-37m-x86_64-linux-gnu.so /usr/local/lib/python3.7/dist-packages/
