@@ -1,0 +1,27 @@
+
+ARGS:
+ tab: 'single_image_test'
+ GPUS: 0
+ multi_person: True
+ kernel_sizes: [5]
+ use_coordmaps: True
+ fine_tune: True
+ eval: False
+ webcam: False
+ video_or_frame: False
+
+ backbone: 'hrnet' 
+ input_size: 512
+ centermap_size: 64
+ model_precision: 'fp32'
+ val_batch_size: 1
+ nw: 4
+ gmodel_path: 'thirdparty/romp/assets/ROMP_hrnet32.pkl' 
+ save_visualization_on_img: True
+
+ demo_image_folder: 'thirdparty/romp/data/'
+ output_dir: 'output/'
+ save_mesh: True
+ save_centermap: False
+ save_dict_results: True
+ multiprocess: False

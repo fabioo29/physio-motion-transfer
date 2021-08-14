@@ -1,0 +1,123 @@
+{% load static %}
+<head>
+    <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js'></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css' rel="stylesheet">
+
+    <link href="{% static 'main/css/main.css' %}" rel="stylesheet">
+
+    <script src="{% static 'main/js/main.js' %}"></script>
+</head>
+<body> 
+    <header>
+		<p class="header-title">Physio Motion Transfer</p>
+		<p class="header-subtitle">Human motion and appearance transfer for physiotherapy purposes</p>
+	</header>
+
+
+    <div class="App">
+        <div class="row">
+            <div class="col-sm">
+                {% if statusImage == 'dup' %}
+                <div class="row-box row">
+                    <div class="alert alert-warning" role="alert"><i class="fa-icon fas fa-exclamation-triangle"></i>That picture has already been submited!</div>
+                </div>
+                {% elif statusImage == 'ext' %}
+                <div class="row-box row">
+                    <div class="alert alert-warning" role="alert"><i class="fa-icon fas fa-exclamation-triangle"></i>That file it is not a picture</div>
+                </div>
+                {% endif %}
+                <div class="row-box row">
+                    <form id="addImage" method="POST" action="{% url 'upload' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="input-file-container">  
+                            <input id="id_image" type="file" class="input-file if-image" name="image">
+                            <label tabindex="0" for="my-file1" class="video-label input-file-trigger if-image"><i class="fa fa-child" aria-hidden="true"></i> Upload body pictures</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="image-section row">
+                    {% for image in Images %}
+                    <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+                        <a href="{{image}}" class="fancybox" rel="ligthbox">
+                            <img  src={{image}} class="zoom img-fluid "  alt="">
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+
+            <div class="col-sm">
+                {% if statusVideo == 'ext' %}
+                <div class="row-box row">playVideo
+                    <div class="alert alert-warning" role="alert"><i class="fa-icon fas fa-exclamation-triangle"></i>That file it is not a video</div>
+                </div>
+                {% elif statusVideo == 'max' %}
+                <div class="row-box row">
+                    <div class="alert alert-warning" role="alert"><i class="fa-icon fas fa-exclamation-triangle"></i>Only one video allowed</div>
+                </div>
+                {% endif %}
+                <div class="row-box row">
+                    <form id="addVideo" method="POST" action="{% url 'upload' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="input-file-container">  
+                            <input class="id_video input-file if-video" name="video" type="file">
+                            <label tabindex="0" for="my-file2" class="video-label input-file-trigger if-video"><i class="fa fa-running" aria-hidden="true"></i> Upload movement video</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="image-section row">
+                    {% for vid in Video %}
+                        <div class="project-container">
+                            <video class="content" loop onmouseover="this.play()" onmouseout="this.pause();" >
+                                <source src="{{vid}}">
+                            </video>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+
+        </div>
+        <div class="row">
+            <div class="col-box col">
+                <form action="#">
+                    <div class="play-stop input-file-container"> 
+                        <a href="{% url 'loadingPage' %}" style="width: 100%; height: 100%" id="id_video1" class="input-file if-video" name="video" type="file"></a>
+                        <label style="background-color: green;" tabindex="0" for="my-file3" class="play-button input-file-trigger"><i class="fa fa-play" aria-hidden="true"></i> Start inference</label>
+                    </div>
+                </form>
+            </div>
+            <div class="col-box col">
+                <form action="#">
+                    <div class="play-stop input-file-container">  
+                        <a href="{% url 'clear_main' %}" style="width: 100%; height: 100%" id="id_video2" class="input-file if-video" name="video" type="button"></a>
+                        <label tabindex="0" for="my-file3" class="stop-button input-file-trigger"><i class="fa fa-trash" aria-hidden="true"></i> Clear Inputs</label>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid"> 
+            <a class="navbar-brand">&copy; 2021 Fábio Oliveira</a>
+            <div class="collapse navbar-collapse" id="navbar20">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item mx-1"><a class="nav-link" href="https://github.com/Fabioo29/physio-motion-transfer"><i class="fa-footer fab fa-github fa-fw fa-lg"></i></a></li>
+                    <li class="nav-item mx-1"><a class="nav-link" href="https://www.linkedin.com/in/fabioo29/"><i class="fa-footer fab fa-linkedin-in fa-fw fa-lg"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    </div>
+</body>
+
