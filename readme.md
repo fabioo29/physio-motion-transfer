@@ -17,11 +17,11 @@ This method is composed by **3** main components and **7** DL models:
  - Body texture extractor
     1. **CIHP_PGN** (Body Instance segmentation (Colored body parts))
     2. **OpenPose** (Body Pose estimation (keypoints))
-    3. **Octopus** (Body, CIHP, OpenPose to SMPL model vertices)
-    4. **Segmantic Human Texture Stitching** (Body, CIHP, Octopus to body texture)
+    3. **Octopus** (3D SMPL body naked model)
+    4. **Segmantic Human Texture Stitching** (3D mesh texture)
  - 3D Body model extractor
-    1. **DensePose** (Body dense extractor (UV map))
-    2. **Tex2Shape** (Body, DensePose to model)  
+    1. **DensePose** (3D UV map coordinates extractor )
+    2. **Tex2Shape** (3D deformated SMPL body model)  
  - Model retargeting
     1. **ROMP** (retarget and render of final posed body model)
 
