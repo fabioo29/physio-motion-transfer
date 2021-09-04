@@ -11,7 +11,7 @@
 
 <p align="center">
   <img src="assets/avatar_retargeting.jpg" width="100%"/>
-  <img width="100%" src="assets/diagram.svg">
+  <img width="100%" src="assets/diagram.jpg">
 </p>
 
 This method is composed by **3** main components and **7** DL models:
