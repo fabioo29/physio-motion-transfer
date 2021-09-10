@@ -2,10 +2,10 @@
  <img src="assets/playground.gif" width="100%"/>
 </p>
 
-## Introduction
+## Introduction <a href="arxiv.org" >[Paper]</a>
 
  <p style='text-align: justify;'> This repository contains the original implementation of Physio Motion Transfer: <b>"A retargeting approach to transfer human motion and appearance in monocular videos for physiotherapy purposes"</b>. This method uses seven deep learning models and can be divided in three parts (Body texture extractor, 3D Body model extractor, Model retargeting). <b>Body color extractor</b> - we extract the model colors(clothes, body color, hair color) given the body samples to a UV plan textured map.
- <b>3D Body model extractor</b> - we extract the 3D body model firstly using SMPL(naked body model) and then later it gets deformed to match current body sample texture like clothes and hair. <b>Model retargeting</b> - With this last step we extract every frame pose from the movement video and replicate each pose in the final textured 3D body model with color to render the final video.</p>
+ <b>3D Body model extractor</b> - we extract the 3D body model firstly using SMPL(naked body model) and then later it gets deformed to match current body sample texture like clothes and hair. <b>Model retargeting</b> - With this last step we extract every frame pose from the movement video and replicate each pose in the final textured 3D body model with color to render the final video. </p>
 
 ## Overall
 
